@@ -1,0 +1,16 @@
+{
+  "port": 5555
+,
+  "servlet":[
+    {
+      "name":"HelloServlet",
+      "class":"HelloServlet",
+      "mapping":"/servlet/hello"
+    },
+    {
+      "name":"GoodbyeServlet",
+      "class":"GoodbyeServlet",
+      "mapping":"/servlet/bye"
+    }
+  ]
+}
