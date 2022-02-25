@@ -3,6 +3,7 @@ package context;
 import handler.HttpHandler;
 import lifecycle.LifeCycle;
 import processor.MainProcessor;
+import servlet.ServletLoader;
 import servlet.ServletWrapper;
 
 import java.util.Map;
@@ -17,7 +18,8 @@ public class MainContext implements LifeCycle {
 
     @Override
     public void init() {
-        ServletContext servletContext = new ServletContext(this.configuration);
+        ServletLoader loader = new ServletLoader(configuration.getRouter());
+        ServletContext servletContext = new ServletContext(this.configuration, loader);
         mainProcessor = MainProcessor.Builder.newBuilder()
                 .setPort(0)
                 .setHandler(HttpHandler.class)

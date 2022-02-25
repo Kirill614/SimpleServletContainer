@@ -4,9 +4,12 @@ import context.ServletContext;
 import handler.BaseHandler;
 import handler.HttpHandler;
 
+import java.io.*;
 import java.lang.reflect.Constructor;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static context.Constants.*;
 
@@ -15,6 +18,7 @@ public class MainProcessor implements Runnable {
     private Class<? extends BaseHandler> handlerClass;
     private ServletContext servletContext;
     private Socket clientSocket;
+    private ExecutorService executorService = Executors.newFixedThreadPool(10);
 
     public MainProcessor(int port, Class<? extends BaseHandler> handlerClass, ServletContext servletContext) {
         this.port = port;
@@ -27,20 +31,24 @@ public class MainProcessor implements Runnable {
         try {
             ServerSocket serverSocket = new ServerSocket(PORT);
             while (true) {
-                 clientSocket = serverSocket.accept();
-                //System.out.println("connected");
-                startClientHandler();
+                clientSocket = serverSocket.accept();
+                System.out.println("connected");
+
+                PProcessor.assign(clientSocket);
+                //startClientHandler();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void startClientHandler() throws Exception{
+    private void startClientHandler() throws Exception {
         Constructor<? extends BaseHandler> handlerConstructor = handlerClass.getConstructor(ServletContext.class);
         servletContext.setClientSocket(clientSocket);
         BaseHandler clientHandler = handlerConstructor.newInstance(servletContext);
-        new Thread(clientHandler).start();
+       // new Thread(clientHandler).start();
+        Thread thread = new Thread(clientHandler);
+        executorService.execute(thread);
     }
 
     public static class Builder {

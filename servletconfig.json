@@ -4,12 +4,12 @@
   "servlet":[
     {
       "name":"HelloServlet",
-      "class":"HelloServlet",
+      "class":"servlet.HelloServlet",
       "mapping":"/servlet/hello"
     },
     {
       "name":"GoodbyeServlet",
-      "class":"GoodbyeServlet",
+      "class":"servlet.GoodbyeServlet",
       "mapping":"/servlet/bye"
     }
   ]

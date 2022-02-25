@@ -2,8 +2,7 @@ package handler;
 
 import context.ServletContext;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -15,7 +14,7 @@ public abstract class BaseHandler implements Runnable {
         this.servletContext = servletContext;
     }
 
-    public abstract void handleRequest(InputStream input) throws Exception;
+    public abstract void handleRequest(InputStream input, OutputStream outputStream) throws Exception;
 
     @Override
     public void run(){
@@ -25,9 +24,11 @@ public abstract class BaseHandler implements Runnable {
     class Processor implements Runnable{
         public void run(){
             InputStream inputStream;
+            OutputStream outputStream;
             try {
                 inputStream = servletContext.getClientSocket().getInputStream();
-                handleRequest(inputStream);
+                outputStream = servletContext.getClientSocket().getOutputStream();
+                handleRequest(inputStream, outputStream);
             } catch (Exception e){
                 e.printStackTrace();
             }
