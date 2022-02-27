@@ -33,9 +33,7 @@ public class MainProcessor implements Runnable {
             while (true) {
                 clientSocket = serverSocket.accept();
                 System.out.println("connected");
-
-                PProcessor.assign(clientSocket);
-                //startClientHandler();
+                startClientHandler();
             }
         } catch (Exception e) {
             e.printStackTrace();

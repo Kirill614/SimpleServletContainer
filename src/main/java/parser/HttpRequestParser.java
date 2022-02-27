@@ -10,38 +10,23 @@ import java.io.InputStreamReader;
 public class HttpRequestParser {
     private InputStream input;
 
-    public HttpRequestParser(InputStream input){
+    public HttpRequestParser(InputStream input) {
         this.input = input;
     }
 
     public String readHttpRequest() throws IOException {
-
-//        try(BufferedReader reader = new BufferedReader(new InputStreamReader(input))){
-//            StringBuilder strBuilder = new StringBuilder();
-//            String string;
-//            while ((string = reader.readLine()) != null){
-//                strBuilder.append(string);
-//            }
-//            return strBuilder.toString();
-//        } catch(Exception e){
-//            e.printStackTrace();
-//        }
-        StringBuilder strBuilder = null;
-        try{
-            strBuilder = new StringBuilder();
-            int i;
-            while((char)(i = input.read()) != '\r'){
-                System.out.println((char) i + " " + Thread.currentThread().getName());
-                strBuilder.append((char) i);
-            }
-            return strBuilder.toString();
-        } catch(Exception e){
+        byte[] bytes = new byte[1000];
+        try {
+            input.read(bytes);
+        } catch (Exception e) {
             e.printStackTrace();
         }
+        String string = new String(bytes);
+        if(!string.isEmpty()) return string;
         return null;
     }
 
-    public HttpRequest parse() throws Exception{
+    public HttpRequest parse() throws Exception {
         String rawRequest = readHttpRequest();
 
         String[] requestArr = rawRequest.split(" ");
